@@ -1,4 +1,6 @@
 import customtkinter as ctk
+import PIL
+import random
 import modules.main_app as m_app
 import modules.create_entry as m_entry
 import modules.search_path as m_path
@@ -8,7 +10,6 @@ password_font = ctk.CTkFont(family= 'Calibri', size= 15, weight= 'normal')
 class MessageFrame(ctk.CTkFrame):
     def __init__(self, email, password, width, height, master, border_width, fg_color, bg_color, **kwargs):
         super().__init__(master= master, width= width, height= height, border_width= border_width, fg_color= fg_color, bg_color= bg_color, **kwargs)
-        
         self.EMAIL = self.message_name_label(text= email, text_color= 'white', fg_color= 'transparent')
         self.PASSWORD = self.message_text_label(text= password, text_color= 'white', fg_color= 'transparent')
         
@@ -48,33 +49,63 @@ message_frame = MessageFrame(
     fg_color= 'transparent',
     bg_color= 'transparent'
 )
+
+
+
+# #####################################################
 message_frame.pack()
+
 dict1 = {
     "email":"",
     "password":""
 }
+
+
+images_photos = ["images/image1.jpg","images/image2.jpg","images/image3.jpg","images/image4.jpg"]
+
+def random_img():
+    num_image = random.randint(0,3)
+    image = ctk.CTkImage(
+        dark_image= PIL.Image.open(m_path.path_search(images_photos[num_image])),
+        size = (400,300)
+        )
+    label_image = ctk.CTkLabel(
+        master= m_app.main_app,
+        text = "",
+        image = image
+    )
+    label_image.place(x = 250, y = 150, anchor = ctk.CENTER)
+
 def write_text():
     dict1["email"] = m_entry.text_input.get()
     dict1["password"] = m_entry.text_input2.get()
     m_path.create_json("json/abc.json", dict1) 
-    m_app.main_app.FRAME1.pack_forget()
-    message_frame.pack_forget()
-    button_image = ctk.CTkButton(
-        master= m_app.main_app,
-        text='generate',
-        width = 100,
-        height=50,
-        fg_color='green'
+    m_entry.text_input.delete(0, ctk.END)
+    m_entry.text_input2.delete(0, ctk.END)
+    send_button = ctk.CTkButton(
+        master = message_frame, 
+        text ="send",
+        width = 90,
+        height = 50,
+        fg_color = 'green',
+        command= write_text
     )
+    send_button.place(x = message_frame._current_width // 2, y = message_frame._current_height // 2 + 140, anchor = ctk.CENTER)
+    
+def generate_button():
+    if dict1.get("email","password") == m_entry.text_input.get() and dict1.get("email","password") == m_entry.text_input2.get():
+        m_app.main_app.FRAME1.pack_forget()
+        message_frame.pack_forget()
+        button_image = ctk.CTkButton(
+            master= m_app.main_app,
+            text='generate',
+            width = 100,
+            height=50,
+            fg_color='green',
+            command= random_img)
+        
     # mentry.text_input.delete(0, ctk.END)
-    button_image.place(x = m_app.app_width // 2, y = m_app.app_height // 2, anchor = ctk.CENTER)
-send_button = ctk.CTkButton(
-    master = message_frame, 
-    text ="send",
-    width = 90,
-    height = 50,
-    fg_color = 'green',
-    command= write_text
-)
-send_button.place(x = message_frame._current_width // 2, y = message_frame._current_height // 2 + 140, anchor = ctk.CENTER)
+        button_image.place(x = m_app.app_width // 2, y = m_app.app_height // 2, anchor = ctk.CENTER)
+#######################################################################
+
 message_frame.pack(side='top', anchor='s', padx=10, pady=50)

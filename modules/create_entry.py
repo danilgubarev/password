@@ -8,7 +8,7 @@ height_input = 50
 font_size = ctk.CTkFont(
     family= "Arial",
     size= 20,
-    weight= "bold"
+    # weight= "bold"
 )
 
 

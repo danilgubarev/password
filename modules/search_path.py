@@ -14,5 +14,5 @@ def create_json(file_to_path, name_dict):
         json.dump(name_dict, file, ensure_ascii= False, indent= 4)
 
 def read_json(name_dict):
-    with open(path_search(name_dict["name"],"r")) as file:
-        json.load(file)
+    with open(path_search(name_dict['password']),"r") as file:
+        return json.load(file,name_dict)
